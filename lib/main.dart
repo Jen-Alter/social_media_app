@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:social_media_app/auth/auth.dart';
 import 'package:social_media_app/themes/dark.dart';
 import 'package:social_media_app/themes/light.dart';
-import 'package:social_media_app/pages/login_page.dart';
 import 'package:social_media_app/firebase_options.dart';
 
 void main() async{
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: lightMode,
       darkTheme: darkMode,
       debugShowCheckedModeBanner: false,
-      home: LoginPage()
+      home: const AuthPage()
     );
   }
 }
