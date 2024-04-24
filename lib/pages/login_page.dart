@@ -1,14 +1,39 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media_app/pages/register_page.dart';
 import 'package:social_media_app/components/my_button.dart';
 import 'package:social_media_app/components/my_drawer.dart';
 import 'package:social_media_app/components/text_field.dart';
+import 'package:social_media_app/helper/helper_functions.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  final void Function()? onTap;
+  const LoginPage({super.key, required this.onTap});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
+  void login() async{
+    showDialog(
+      context: context,
+      builder: (context) => const Center(child: CircularProgressIndicator())
+    );
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text, password: passwordController.text);
+
+        if (context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      displayMessageToUser(e.code, context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +80,16 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 15),
               MyButton(
                 text: "L O G I N",
-                onTap: (){}
+                onTap: login
               ),
 
+              const SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   const Text("Don't have an account?"),
                   TextButton(
-                    onPressed: (){
-                      Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => RegisterPage())
-                      );
-                    },
+                    onPressed: widget.onTap,
                     child: Text("Sign up", style: TextStyle(
                       fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.inversePrimary,
                     )),
