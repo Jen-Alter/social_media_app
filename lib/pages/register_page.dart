@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:social_media_app/helper/helper_functions.dart';
-
 import '../components/my_button.dart';
 import 'package:flutter/material.dart';
 import '../components/text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_media_app/helper/helper_functions.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -45,11 +45,23 @@ class _RegisterPageState extends State<RegisterPage> {
         email: emailController.text,
         password: passwordController.text
         );
+        // CREATE: A user document and add to the firestore database
+        createUserDocument(userCredential);
 
-        Navigator.pop(context);
+        if(context.mounted) Navigator.pop(context);
     }on FirebaseAuthException catch(e){
       Navigator.pop(context);
       displayMessageToUser(e.code, context);
+    }
+  }
+
+  Future<void> createUserDocument(UserCredential? userCredential) async{
+    if(userCredential != null && userCredential.user != null){
+      await FirebaseFirestore.instance.collection("Users").doc(
+        userCredential.user!.email).set({
+          'email': emailController.text,
+          'username': usernameController.text,
+        });
     }
   }
 

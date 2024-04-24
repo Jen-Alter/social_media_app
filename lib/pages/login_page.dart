@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_media_app/components/my_button.dart';
-import 'package:social_media_app/components/my_drawer.dart';
 import 'package:social_media_app/components/text_field.dart';
 import 'package:social_media_app/helper/helper_functions.dart';
 
@@ -38,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const MyDrawer(),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
         child: Padding(
